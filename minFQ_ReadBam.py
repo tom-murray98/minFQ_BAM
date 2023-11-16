@@ -13,6 +13,7 @@ class ReadBam:
     `       channel: channel ID
             read_number: read number
             seq_to_signal :sequence to signal move table
+            rg_id : read group identifier
             dt: time of run
             ds: run ID in basecall model
             bm: basecall model
@@ -32,7 +33,7 @@ class ReadBam:
         """Extracts relevant information from read group (RG) tags."""
         rg_tags = self.sam_file.header.get("RG", [])
         for rg_tag in rg_tags:
-            ident = rg_tag.get("ID", None)
+            rg_id = rg_tag.get("ID", None)
             dt = rg_tag.get("DT", None)
             ds = rg_tag.get("DS", None)
             # DS contains bm and ri tags
@@ -46,7 +47,7 @@ class ReadBam:
             pu = rg_tag.get("PU", None)
             al = rg_tag.get("al", None)
 
-            return ident, dt, bm, ri, lb, pl, pm, pu, al
+            return rg_id, dt, bm, ri, lb, pl, pm, pu, al
 
     def read_bam(self):
         """Reads BAM file, iterates through information from reads and yields it."""
@@ -59,7 +60,7 @@ class ReadBam:
                 print("This file is unaligned")
 
             # Get info from RG tags
-            ident, dt, bm, ri, lb, pl, pm, pu, al = self.get_rg_tags()
+            rg_id, dt, bm, ri, lb, pl, pm, pu, al = self.get_rg_tags()
             # Iterates through reads
             for read in self.sam_file:
                 name = read.query_name
@@ -78,7 +79,7 @@ class ReadBam:
                     channel,
                     read_number,
                     read_basecall_id,
-                    ident,
+                    rg_id,
                     dt,
                     bm,
                     ri,
@@ -92,25 +93,25 @@ class ReadBam:
     def process_reads(self):
         """Makes dictionary containing current read info"""
         for (
-            name,
-            seq,
-            qual,
-            start_time_pr,
-            channel,
-            read_number,
-            read_basecall_id,
-            ident,
-            dt,
-            bm,
-            ri,
-            lb,
-            pl,
-            pu,
-            pm,
-            al,
+                name,
+                seq,
+                qual,
+                start_time_pr,
+                channel,
+                read_number,
+                read_basecall_id,
+                rg_id,
+                dt,
+                bm,
+                ri,
+                lb,
+                pl,
+                pu,
+                pm,
+                al,
         ) in self.read_bam():
             bam_read = {
-                "id": ident,
+                "read_group_id": rg_id,
                 "time_of_run": dt,
                 "basecall_model": bm,
                 "run_id": ri,
@@ -129,9 +130,12 @@ class ReadBam:
                 "read_basecall_id": read_basecall_id,
             }
 
+            print(bam_read)
+            break
+
 
 if __name__ == "__main__":
     # Uses ReadBam to read ban file in and yield results
-    read_bam_try = ReadBam(bam_file="230498_pass_68a2633f_385676fd_0.bam")
+    read_bam_try = ReadBam(bam_file="/home/p2solo/PycharmProjects/pythonProject/sort_ds1263_NUH7_M1.sup.meth.hg38.bam")
     # Uses .process_reads to move into library
     read_bam_try.process_reads()
