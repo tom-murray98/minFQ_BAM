@@ -139,6 +139,6 @@ class ReadBam:
 
 if __name__ == "__main__":
     # Uses ReadBam to read ban file in and yield resultsds1263_single_OLD.bam
-    read_bam_try = ReadBam(bam_file="230498_pass_68a2633f_385676fd_0.bam")
+    read_bam_try = ReadBam(bam_file="/home/p2solo/PycharmProjects/pythonProject/230498_pass_68a2633f_385676fd_0.bam")
     # Uses .process_reads to move into library and print
     read_bam_try.process_reads()
