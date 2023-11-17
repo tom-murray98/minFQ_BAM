@@ -1,4 +1,5 @@
 import pysam
+import logging
 
 
 class ReadBam:
@@ -25,13 +26,18 @@ class ReadBam:
             al: unknown (outputs unclassified)
     """
 
-    def __init__(self, bam_file=None):
+    def __init__(self, bam_file):
         """constructor: Initializes class with the path to the BAM"""
+        self.sam_file = None
         self.bam_file = bam_file
 
     def get_rg_tags(self):
         """Extracts relevant information from read group (RG) tags."""
         rg_tags = self.sam_file.header.get("RG", [])
+        # Exits script if no RG field (for Graeme)
+        if not rg_tags:
+            print("This file does not contain an @RG field")
+            exit()
         for rg_tag in rg_tags:
             rg_id = rg_tag.get("ID", None)
             dt = rg_tag.get("DT", None)
@@ -54,6 +60,7 @@ class ReadBam:
         if self.bam_file:
             self.sam_file = pysam.AlignmentFile(self.bam_file, "rb", check_sq=False)
             # Check if the file is aligned or unaligned, redundant??
+
             if self.sam_file.nreferences != 0:
                 print("This file is aligned")
             else:
@@ -136,6 +143,6 @@ class ReadBam:
 
 if __name__ == "__main__":
     # Uses ReadBam to read ban file in and yield results
-    read_bam_try = ReadBam(bam_file="/home/p2solo/PycharmProjects/pythonProject/sort_ds1263_NUH7_M1.sup.meth.hg38.bam")
+    read_bam_try = ReadBam(bam_file="/home/p2solo/PycharmProjects/pythonProject/230498_pass_68a2633f_385676fd_0.bam")
     # Uses .process_reads to move into library
     read_bam_try.process_reads()
