@@ -130,8 +130,6 @@ class ReadBam:
                 "read_basecall_id": read_basecall_id,
             }
 
-            print(bam_read)
-            break
 
 
 if __name__ == "__main__":
