@@ -1,6 +1,6 @@
 # minFQ_BAM
 
-A simple tool for reading BAM file data.
+A simple tool for reading and parsing BAM file data.
 
 ## Installation Instructions
 
