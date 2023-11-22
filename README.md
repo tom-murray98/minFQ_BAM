@@ -7,7 +7,7 @@ python3>=3.8
 
 
 ```
-git clone path-to-git-repo
+git clone https://github.com/tom-murray98/minFQ_BAM/
 cd minFQ_BAM
 python3 -m venv venv
 source venv/bin/activate
