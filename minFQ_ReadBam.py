@@ -96,7 +96,7 @@ def parse_fastq_description(description):
 @click.argument('fh', type=click.Path(exists=True))
 @click.option('--rg', is_flag=True, show_default=True, default=False,
               help="Prints @RG tags only found in the BAM file header.")
-def input_bam(fh, rg):
+def main(fh, rg):
     for desc, name, seq, qual in ReadBam(bam_file=fh).read_bam():
         if rg:
             var = ReadBam(bam_file=fh).tags
@@ -109,5 +109,5 @@ def input_bam(fh, rg):
 
 
 if __name__ == '__main__':
-    input_bam()
+    main()
 
