@@ -68,7 +68,7 @@ class ReadBam:
             read_basecall_id = read.get_tag('RG')
 
             # Combines read and @RG metrics to create description variable, using the same format as FASTQ files
-            desc = '@' + str(name) + ' runid:' + str(self.tags['run_id']) + ' read=' + str(read_number) + ' ch=' + str(
+            desc = '@' + str(name) + ' runid=' + str(self.tags['run_id']) + ' read=' + str(read_number) + ' ch=' + str(
                 channel) + ' start_time=' + str(start_time_pr) + ' flow_cell_id=' + str(
                 self.tags['flow_cell_id']) + ' protocol_group_id=' + 'UNKNOWN' + ' sample_id=' + str(
                 self.tags['sample_id']) + ' parent_read_id=' + str(name) + ' basecall_model_version_id=' + str(
