@@ -80,7 +80,7 @@ class ReadBam:
 
 
 # This function was taken from https://github.com/LooseLab/minotourcli/blob/master/minFQ/fastq_handler_utils.py#L137
-# Not intended for permanent use, testing purpose only.
+# Not intended for permanent use, testing purpose only
 def parse_fastq_description(description):
     description_dict = {}
     descriptors = description.split(" ")
