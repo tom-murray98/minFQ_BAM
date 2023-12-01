@@ -1,5 +1,6 @@
 import pysam
 import click
+from pathlib import Path, PurePosixPath
 
 
 class ReadBam:
@@ -29,12 +30,13 @@ class ReadBam:
     def __init__(self, bam_file):
         """ Initializes bam_file and tags as instances """
         # Defines self.bam_file as an AlignmentFile object for reading input BAM file
-        self.bam_file = pysam.AlignmentFile(bam_file, 'rb', check_sq=False)
+        self.bam_file = pysam.AlignmentFile(bam_file, 'rb', check_sq=False, threads=4)
+        print(PurePosixPath(bam_file).suffixes)
         self.tags = self.get_rg_tags(self.bam_file)
 
     def get_rg_tags(self, bam_file):
         """ Detects and retrieves @RG header tags from a BAM file and assigns each one to a dictionary """
-        # Gets @RG from header
+        # Gets @RG tags from the BAM file header
         rg_tags = bam_file.header.get('RG', [])
         # Exits script if no @RG field present
         if not rg_tags:
@@ -68,11 +70,11 @@ class ReadBam:
             read_basecall_id = read.get_tag('RG')
 
             # Combines read and @RG metrics to create description variable, using the same format as FASTQ files
-            desc = '@' + str(name) + ' runid=' + str(self.tags['run_id']) + ' read=' + str(read_number) + ' ch=' + str(
-                channel) + ' start_time=' + str(start_time_pr) + ' flow_cell_id=' + str(
-                self.tags['flow_cell_id']) + ' protocol_group_id=' + 'UNKNOWN' + ' sample_id=' + str(
-                self.tags['sample_id']) + ' parent_read_id=' + str(name) + ' basecall_model_version_id=' + str(
-                self.tags['basecall_model_version_id'])
+            desc = (f"@{str(name)} runid={str(self.tags['run_id'])} read={str(read_number)} ch={str(channel)} "
+                    f"start_time={str(start_time_pr)} flow_cell_id={str(self.tags['flow_cell_id'])} protocol_group_id"
+                    f"=UNKNOWN sample_id={str(self.tags['sample_id'])} parent_read_id={str(name)}"
+                    f" basecall_model_version_id={str(self.tags['basecall_model_version_id'])}")
+
             # Yields FASTQ metrics
             yield desc, name, seq, qual
 
@@ -110,4 +112,3 @@ def input_bam(fh, rg):
 
 if __name__ == '__main__':
     input_bam()
-
