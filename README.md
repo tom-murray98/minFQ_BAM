@@ -21,7 +21,7 @@ pip install -r requirements.txt
 Usage: python3 minFQ_ReadBam.py [OPTIONS] FILE_PATH
 
 Options:
-  --rg    Prints @RG tags only found in the BAM file header.
+  --rg    Prints @RG tags found only in the BAM file header.
   --help  Show this message and exit.
 
 ```
